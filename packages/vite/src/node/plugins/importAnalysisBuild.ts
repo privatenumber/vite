@@ -468,11 +468,11 @@ export function buildImportAnalysisPlugin(config: ResolvedConfig): Plugin {
           const dependencies = new Set<string>()
           let hasRemovedPureCssChunk = false
 
-          let importSpecifierResolved: string | undefined = undefined
+          let importUrlResolved: string | undefined = undefined
 
           if (importSpecifier) {
             // Resolve import target path
-            importSpecifierResolved = path.posix.join(
+            importUrlResolved = path.posix.join(
               path.posix.dirname(ownerFilename),
               importSpecifier, // What if it's ../../ ?
             )
@@ -510,7 +510,7 @@ export function buildImportAnalysisPlugin(config: ResolvedConfig): Plugin {
                   s.update(expStart, expEnd, 'Promise.resolve({})')
                 }
               }
-            })(importSpecifierResolved)
+            })(importUrlResolved)
           }
 
           // the dep list includes the main chunk, so only need to reload when there are actual other deps.
@@ -528,7 +528,7 @@ export function buildImportAnalysisPlugin(config: ResolvedConfig): Plugin {
           const resolveDependencies = modulePreload
             ? modulePreload.resolveDependencies
             : undefined
-          if (resolveDependencies && importSpecifierResolved) {
+          if (resolveDependencies && importUrlResolved) {
             // We can't let the user remove css deps as these aren't really preloads, they are just using
             // the same mechanism as module preloads for this chunk
             const cssDeps: string[] = []
@@ -537,7 +537,7 @@ export function buildImportAnalysisPlugin(config: ResolvedConfig): Plugin {
               ;(dep.endsWith('.css') ? cssDeps : otherDeps).push(dep)
             }
             depsArray = [
-              ...resolveDependencies(importSpecifierResolved, otherDeps, {
+              ...resolveDependencies(importUrlResolved, otherDeps, {
                 hostId: chunkName,
                 hostType: 'js',
               }),
