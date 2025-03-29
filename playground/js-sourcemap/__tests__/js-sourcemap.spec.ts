@@ -143,7 +143,7 @@ describe.runIf(isBuild)('build tests', () => {
       {
         "debugId": "00000000-0000-0000-0000-000000000000",
         "ignoreList": [],
-        "mappings": ";+7BAAA,OAAO,2BAAuB,8BAE9B,QAAQ,IAAI,uBAAuB",
+        "mappings": ";+7BAAA,OAAO,2BAAuB,0BAE9B,QAAQ,IAAI,uBAAuB",
         "sources": [
           "../../after-preload-dynamic.js",
         ],
@@ -167,7 +167,7 @@ describe.runIf(isBuild)('build tests', () => {
     const js = findAssetFile(/after-preload-dynamic-hashbang-[-\w]{8}\.js$/)
     expect(js.split('\n').slice(0, 2)).toEqual([
       '#!/usr/bin/env node',
-      expect.stringMatching('const __viteSymbol_6db200'),
+      expect.stringContaining('const __vite__mapDeps=(i'),
     ])
   })
 
